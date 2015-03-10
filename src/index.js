@@ -1,7 +1,7 @@
-
 var gravatarProvider = require('./gravatarProvider');
 var ngGravatar = require('./ngGravatar');
 
-angular.module('ngGravatar', [])
+module.exports = angular
+    .module('ngGravatar', [])
     .provider('gravatar', gravatarProvider)
     .directive('ngGravatar', ngGravatar);

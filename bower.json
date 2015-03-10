@@ -1,0 +1,26 @@
+{
+  "name": "ng-gravatar",
+  "main": ["./dist/md5.js", "./dist/ng-gravatar.js"],
+  "version": "0.0.1",
+  "homepage": "https://github.com/Spidy88/ngGravatar",
+  "authors": [
+    "Nick Ferraro <spidy.88@gmail.com>"
+  ],
+  "description": "An AngularJS module for Gravatars.",
+  "keywords": [
+    "gravatar",
+    "angular",
+    "angularjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "blueimp-md5": "~1.1.0"
+  }
+}

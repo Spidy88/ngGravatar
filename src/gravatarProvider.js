@@ -1,9 +1,8 @@
-var md5 = require('blueimp-md5').md5;
-
 module.exports = gravatarProvider;
 
 gravatarProvider.$inject = [];
 function gravatarProvider() {
+    var oneTimeBind = true;
     var baseUrl = '//www.gravatar.com/avatar/';
     var shouldEnforceExtension = false;
     var fileExtension = '.jpg';
@@ -12,16 +11,18 @@ function gravatarProvider() {
     var defaultRating;
 
     this.$get = $get;
-    this.setBaseUrl = setBaseUrl;
-    this.enforceExtension = enforceExtension;
-    this.setDefaultImage = setDefaultImage;
-    this.setDefaultSize = setDefaultSize;
-    this.setDefaultRating = setDefaultRating;
+    this.configure = configure;
+    this.bindOnce = bindOnce;
 
     function $get() {
         var service = {
+            shouldBindOnce: shouldBindOnce,
             generateUrl: generateUrl
         };
+
+        function shouldBindOnce() {
+            return oneTimeBind;
+        }
 
         function generateUrl(opts) {
             var hash = opts.hash || md5(opts.email);
@@ -47,15 +48,12 @@ function gravatarProvider() {
             }
 
             if( r = opts.rating || defaultRating ) {
-                params.push('r=' + r);
+                params.push('r=' + encodeURIComponent(r));
             }
 
             if( params.length ) {
                 url += ('?' + params.join('&'));
             }
-
-            console.log('Params: ', params);
-            console.log('Options: ', opts);
 
             return url;
         }
@@ -63,33 +61,38 @@ function gravatarProvider() {
         return service;
     }
 
-    function setBaseUrl(url) {
-        // Verify url is defined and a string
-        if( angular.isUndefined(url) || (url !== 'string') ) {
-            return console.error('Gravatar#setBaseUrl requires a string base url parameter');
+    function configure(options) {
+        if( options.hasOwnProperty('baseUrl') ) {
+            setBaseUrl(options.baseUrl);
         }
 
+        if( options.hasOwnProperty('enforceExtension') ) {
+            shouldEnforceExtension = !!options.enforceExtension;
+        }
+
+        if( options.hasOwnProperty('defaultImage') ) {
+            defaultImage = options.defaultImage;
+        }
+
+        if( options.hasOwnProperty('defaultSize') ) {
+            defaultSize = options.defaultSize;
+        }
+
+        if( options.hasOwnProperty('defaultRating') ) {
+            defaultRating = options.defaultRating;
+        }
+    }
+
+    function bindOnce(enabled) {
+        oneTimeBind = !!enabled;
+    }
+
+    function setBaseUrl(url) {
         // Make sure the url ends with a slash
         if( url[url.length - 1] !== '/' ) {
             url += '/';
         }
 
         baseUrl = url;
-    }
-
-    function enforceExtension(shouldEnforce) {
-        shouldEnforceExtension = !!shouldEnforce;
-    }
-
-    function setDefaultImage(url) {
-        defaultImage = url;
-    }
-
-    function setDefaultSize(size) {
-        defaultSize = size;
-    }
-
-    function setDefaultRating(rating) {
-        defaultRating = rating;
     }
 }
