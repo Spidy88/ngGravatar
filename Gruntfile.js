@@ -1,6 +1,6 @@
-module.exports = function(grunt) {
+module.exports = function( grunt ) {
     grunt.registerTask( 'default', [ 'clean', 'build', 'copy' ] );
-    grunt.registerTask( 'build', [ 'browserify', 'uglify' ]);
+    grunt.registerTask( 'build', [ 'browserify', 'uglify' ] );
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
             }
         },
 
-        clean: ['./dist']
+        clean: [ './dist' ]
     });
 
     grunt.loadNpmTasks('grunt-browserify');
