@@ -44,4 +44,46 @@ describe('gravatarProvider', function() {
             gravatarSvc.shouldBindOnce().should.be.false;
         });
     });
+
+    describe('configure', function() {
+        it('should exist', function() {
+            providerInstance.should.respondTo('configure');
+        });
+    });
+
+    describe('gravatar', function() {
+        var gravatarSvc;
+
+        beforeEach(function() {
+            gravatarSvc = providerInstance.$get();
+        });
+
+        describe('generateUrl', function() {
+            it('should generate a minimal url', function() {
+                var testHash = '01234';
+                var urlPattern = new RegExp('^//www.gravatar.com/avatar/' + testHash + '$');
+                var url;
+
+                url = gravatarSvc.generateUrl({ hash: testHash });
+
+                url.should.match(urlPattern);
+            });
+
+            xit('should support size', function() {
+
+            });
+
+            xit('should support a default image', function() {
+
+            });
+
+            xit('should support forcing default image', function() {
+
+            });
+
+            xit('should support rating filter', function() {
+
+            });
+        });
+    });
 });
