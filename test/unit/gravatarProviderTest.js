@@ -1,7 +1,11 @@
 var chai = require('chai');
+var sinon = require('sinon');
+var sinonChai = require("sinon-chai");
+
 var gravatarProvider = require('../../src/gravatarProvider');
 
 chai.should();
+chai.use(sinonChai);
 
 describe('gravatarProvider', function() {
     var providerInstance;
@@ -59,18 +63,59 @@ describe('gravatarProvider', function() {
         });
 
         describe('generateUrl', function() {
+            var mockHash = '88';
+            var test;
+
+            beforeEach(function() {
+                global.md5 = sinon.stub().returns(mockHash);
+
+                test = {
+                    hash: '12345',
+                    email: 'the.nick.ferraro@gmail.com',
+                    size: 200
+                };
+            });
+
             it('should generate a minimal url', function() {
-                var testHash = '01234';
-                var urlPattern = new RegExp('^//www.gravatar.com/avatar/' + testHash + '$');
+                var urlPattern = new RegExp('^//www.gravatar.com/avatar/' + test.hash + '$');
                 var url;
 
-                url = gravatarSvc.generateUrl({ hash: testHash });
+                url = gravatarSvc.generateUrl({ hash: test.hash });
 
                 url.should.match(urlPattern);
             });
 
-            xit('should support size', function() {
+            it('should generate a hash', function() {
+                var urlPattern = new RegExp('^//www.gravatar.com/avatar/' + mockHash + '$');
+                var url;
 
+                url = gravatarSvc.generateUrl({ email: test.email });
+                url = gravatarSvc.generateUrl({ email: test.email });
+
+                url.should.match(urlPattern);
+                global.md5.should.have.been.called.once;
+            });
+
+            it('should prefer hash over email', function() {
+                var urlPattern = new RegExp('^//www.gravatar.com/avatar/' + test.hash + '$');
+                var url;
+
+                url = gravatarSvc.generateUrl({
+                    hash: test.hash,
+                    email: test.email
+                });
+
+                url.should.match(urlPattern);
+                global.md5.should.not.have.been.called;
+            });
+
+            xit('should support size', function() {
+                url = gravatarSvc.generateUrl({
+                    hash: test.hash,
+                    size: test.size
+                });
+
+                //urlParams.should.have.property('s', test.size ).or.propert('size', test.size);
             });
 
             xit('should support a default image', function() {
@@ -82,6 +127,10 @@ describe('gravatarProvider', function() {
             });
 
             xit('should support rating filter', function() {
+
+            });
+
+            xit('should support multiple configurations', function() {
 
             });
         });
