@@ -1,6 +1,13 @@
-module.exports = function( grunt ) {
-    grunt.registerTask( 'default', [ 'clean', 'build', 'copy' ] );
-    grunt.registerTask( 'build', [ 'browserify', 'uglify' ] );
+module.exports = function(grunt) {
+    grunt.registerTask('default', [
+        'clean',
+        'build',
+        'copy'
+    ]);
+    grunt.registerTask('build', [
+        'browserify',
+        'uglify'
+    ]);
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -8,7 +15,7 @@ module.exports = function( grunt ) {
         browserify: {
             dist: {
                 files: {
-                    './dist/ng-gravatar.js': [ './src/index.js' ]
+                    './dist/ng-gravatar.js': ['./src/index.js']
                 }
             }
         },
@@ -20,7 +27,7 @@ module.exports = function( grunt ) {
                     sourceMap: true
                 },
                 files: {
-                    './dist/ng-gravatar.min.js': [ './dist/ng-gravatar.js' ]
+                    './dist/ng-gravatar.min.js': ['./dist/ng-gravatar.js']
                 }
             }
         },
@@ -36,12 +43,12 @@ module.exports = function( grunt ) {
 
         watch: {
             dist: {
-                files: [ './src/**/*.js' ],
-                tasks: [ 'build' ]
+                files: ['./src/**/*.js'],
+                tasks: ['build']
             }
         },
 
-        clean: [ './dist' ]
+        clean: ['./dist']
     });
 
     grunt.loadNpmTasks('grunt-browserify');
