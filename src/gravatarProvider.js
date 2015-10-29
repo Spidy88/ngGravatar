@@ -20,6 +20,8 @@ function gravatarProvider() {
             generateUrl: generateUrl
         };
 
+        return service;
+
         function shouldBindOnce() {
             return oneTimeBind;
         }
@@ -57,8 +59,6 @@ function gravatarProvider() {
 
             return url;
         }
-
-        return service;
     }
 
     function configure(options) {

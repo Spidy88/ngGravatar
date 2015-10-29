@@ -2,13 +2,11 @@ module.exports = ngGravatar;
 
 ngGravatar.$inject = ['gravatar'];
 function ngGravatar(gravatar) {
-    var ddo = {
+    return {
         scope: {},
         restrict: 'EA',
         link: link
     };
-
-    return ddo;
 
     function link(scope, element, attrs) {
         var isElement = /NG-GRAVATAR/i.test(element[0].nodeName);
@@ -24,15 +22,16 @@ function ngGravatar(gravatar) {
         if( (scope.bindOnce !== undefined && !scope.bindOnce) || !gravatar.shouldBindOnce() ) {
             // Watch attributes for changes and triggers updateGravatar immediately
             scope.$watchCollection( currentAttrs, updateGravatar );
-        } else {
-            // Make sure the gravatar url is generated at least once
+        }
+        // Else use a one time binding and generate the url just this once
+        else {
             updateGravatar();
         }
 
         // Get the current set of attributes (only those we care about)
         function currentAttrs() {
             return {
-                email: attrs.email,
+                email: attrs['ng-gravatar'] || attrs.email,
                 hash: attrs.hash,
                 size: attrs.size || attrs.s,
                 defaultImage: attrs['default-image'] || attrs.d,
@@ -43,15 +42,7 @@ function ngGravatar(gravatar) {
 
         // Update the gravatar url
         function updateGravatar() {
-            var gravatarOptions = {
-                email: attrs.email,
-                hash: attrs.hash,
-                size: attrs.size || attrs.s,
-                defaultImage: attrs['default-image'] || attrs.d,
-                forceDefault: attrs['force-default'] || attrs.f,
-                rating: attrs.rating || attrs.r
-            };
-
+            var gravatarOptions = currentAttrs();
             var gravatarUrl = gravatar.generateUrl(gravatarOptions);
 
             element.attr('src', gravatarUrl);
