@@ -90,10 +90,9 @@ describe('gravatarProvider', function() {
                 var url;
 
                 url = gravatarSvc.generateUrl({ email: test.email });
-                url = gravatarSvc.generateUrl({ email: test.email });
 
                 url.should.match(urlPattern);
-                global.md5.should.have.been.called.once;
+                global.md5.should.have.been.calledOnce;
             });
 
             it('should prefer hash over email', function() {
